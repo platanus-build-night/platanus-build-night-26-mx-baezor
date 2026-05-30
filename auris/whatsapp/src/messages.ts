@@ -40,3 +40,16 @@ export function copyForErrorCode(code: string | undefined | null): string {
   }
   return GENERIC_FALLBACK;
 }
+
+/**
+ * True if `text` is one of the bot's own outgoing strings (the ack, the generic
+ * fallback, or any mapped error copy). Used to skip our own replies when we also
+ * listen to fromMe messages (so the self-chat can be a demo input without the
+ * bot reacting to the messages it just sent — i.e. no reply loop).
+ */
+export function isBotCopy(text: string | undefined | null): boolean {
+  const t = (text ?? "").trim();
+  if (!t) return false;
+  if (t === ACK || t === GENERIC_FALLBACK) return true;
+  return (Object.values(ERROR_COPY) as string[]).includes(t);
+}

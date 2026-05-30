@@ -19,7 +19,8 @@ import * as dotenv from "dotenv";
 import qrcode from "qrcode-terminal";
 import wweb from "whatsapp-web.js";
 
-import { ACK, GENERIC_FALLBACK, copyForErrorCode } from "./messages";
+import { ACK, GENERIC_FALLBACK, copyForErrorCode, isBotCopy } from "./messages";
+import { startQrServer } from "./qrWeb";
 
 dotenv.config();
 
@@ -34,6 +35,21 @@ const ENGINE_URL = (
 ).replace(/\/+$/, "");
 
 const PDF_MIME = "application/pdf";
+
+// Demo-only: serve the pairing QR as a scannable image at http://localhost:<QR_PORT>.
+const QR_PORT = Number(process.env.QR_PORT ?? "4000");
+const qrServer = startQrServer(QR_PORT);
+
+// Demo: only react to YOUR OWN self-chat ("Message Yourself"); ignore messages
+// from other people so the bot never replies to your real contacts. Set
+// SELF_CHAT_ONLY=false to restore the production flow (receive material from others).
+const SELF_CHAT_ONLY =
+  (process.env.SELF_CHAT_ONLY ?? "true").toLowerCase() !== "false";
+
+// Optional explicit self-chat id (e.g. "<lid>@lid" or "<num>@c.us") — a guaranteed
+// match for the demo when auto-detecting the @lid self-chat is unreliable. Read the
+// value from the client's startup log ("Linked as: … lid=…") or the resolve dbg line.
+const SELF_CHAT_LID = process.env.SELF_CHAT_LID?.trim() || undefined;
 
 /** The engine's 200 envelope (EXACT field names per contract). */
 interface GenerateEnvelope {
@@ -136,13 +152,12 @@ async function replyWithVoiceNote(
 // ─── Message handler ─────────────────────────────────────────────────────────
 
 /**
- * Handle one inbound message. Guaranteed to terminate in a reply on every
- * non-ignored path. Errors are mapped to Spanish copy; anything unexpected
- * falls back to the generic message.
+ * Process one inbound request (incoming from another chat, or a self-chat demo
+ * message). Routing/loop-prevention happens in the listeners below; by the time
+ * we get here the message is a real request. Guaranteed to terminate in a reply
+ * on every actionable path; errors map to Spanish copy.
  */
 async function handleMessage(msg: Message): Promise<void> {
-  // ── Guards: ignore our own messages, status broadcasts, empty noise. ──
-  if (msg.fromMe) return;
   if (msg.from === "status@broadcast") return;
 
   const body = (msg.body ?? "").trim();
@@ -207,10 +222,95 @@ async function handleMessage(msg: Message): Promise<void> {
   }
 }
 
+// ─── Routing helpers ─────────────────────────────────────────────────────────
+
+// The linked account's own ids (set on ready). WhatsApp uses two addressing
+// schemes: the phone-number "@c.us" wid and an opaque "@lid". The self-chat
+// ("Message Yourself") shows up under the @lid, so we match by resolved phone
+// NUMBER rather than by a single id string.
+let ownId: string | undefined; // e.g. 5219983465191@c.us
+let myNumber: string | undefined; // e.g. 5219983465191
+let myLid: string | undefined; // e.g. 171318309859490@lid (self-chat is addressed by lid)
+
+/** True if this fromMe message is one of OUR replies (ack/error text or a voice note). */
+function isOwnReply(msg: Message): boolean {
+  if (msg.type === "audio" || msg.type === "ptt") return true; // voice notes we send
+  return isBotCopy(msg.body);
+}
+
+/** Pull a "@lid" serialized id out of a contact's various shapes. */
+function lidFromContact(c: unknown): string | undefined {
+  const a = c as { lid?: { _serialized?: string } | string; _data?: { lid?: { _serialized?: string } | string } };
+  const cand =
+    (typeof a?.lid === "object" ? a.lid?._serialized : a?.lid) ??
+    (typeof a?._data?.lid === "object" ? a._data?.lid?._serialized : a?._data?.lid);
+  return typeof cand === "string" ? cand : undefined;
+}
+
+/** Pull a real phone number (digits) out of a contact's raw data (lid contacts hide it in _data). */
+function phoneFromContact(c: unknown): string | undefined {
+  const a = c as { number?: string; _data?: Record<string, unknown> };
+  const d = a?._data ?? {};
+  for (const v of [d.pn, d.phoneNumber, d.phone, a?.number]) {
+    if (typeof v === "string" && !v.includes("@lid")) {
+      const digits = v.replace(/\D/g, "");
+      if (digits) return digits;
+    }
+  }
+  return undefined;
+}
+
+/** Resolve and cache our own @lid so we can recognize the self-chat (best-effort). */
+async function resolveMyLid(): Promise<void> {
+  if (!ownId) return;
+  try {
+    const me = await client.getContactById(ownId);
+    myLid = lidFromContact(me);
+  } catch {
+    /* best-effort; SELF_CHAT_LID is the reliable override when this can't resolve */
+  }
+}
+
+/**
+ * True if `msg` belongs to the user's own self-chat. WhatsApp addresses the
+ * self-chat by an opaque "@lid"; match it by our own lid OR by a real phone
+ * number dug out of the contact's raw data (both cross-check the same account).
+ */
+async function isSelfChat(msg: Message): Promise<boolean> {
+  const chat = await msg.getChat();
+  const id = chat.id._serialized;
+  if (SELF_CHAT_LID && id === SELF_CHAT_LID) return true; // explicit override (demo)
+  if (ownId && id === ownId) return true; // @c.us self-chat
+  if (myLid && id === myLid) return true; // @lid self-chat (cached)
+  if (chat.isGroup) return false;
+  try {
+    const contact = await client.getContactById(id);
+    const lid = lidFromContact(contact);
+    const phone = phoneFromContact(contact);
+    if (lid && myLid && lid === myLid) return true;
+    return !!phone && !!myNumber && phone === myNumber;
+  } catch {
+    return false;
+  }
+}
+
 // ─── Client wiring ───────────────────────────────────────────────────────────
+
+// Optional WhatsApp Web version pin. Left unset by default (the built-in version
+// reaches "ready" cleanly here); set WA_WEB_VERSION to pin a known-good build from
+// github.com/wppconnect-team/wa-version if WhatsApp ships a breaking update.
+const WA_WEB_VERSION = process.env.WA_WEB_VERSION;
 
 const client = new Client({
   authStrategy: new LocalAuth(), // persists session under .wwebjs_auth/
+  ...(WA_WEB_VERSION
+    ? {
+        webVersionCache: {
+          type: "remote" as const,
+          remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${WA_WEB_VERSION}.html`,
+        },
+      }
+    : {}),
   puppeteer: {
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -218,11 +318,13 @@ const client = new Client({
 });
 
 client.on("qr", (qr: string) => {
-  console.log("[auris-whatsapp] Scan this QR code with WhatsApp:");
+  qrServer.setQr(qr);
+  console.log(`[auris-whatsapp] Scan the QR at ${qrServer.url} (or the terminal):`);
   qrcode.generate(qr, { small: true });
 });
 
 client.on("authenticated", () => {
+  qrServer.setStatus("authenticated");
   console.log("[auris-whatsapp] Authenticated. Session persisted.");
 });
 
@@ -230,21 +332,47 @@ client.on("auth_failure", (message: string) => {
   console.error("[auris-whatsapp] Authentication failure:", message);
 });
 
-client.on("ready", () => {
+client.on("ready", async () => {
+  qrServer.setStatus("ready");
+  ownId = client.info?.wid?._serialized;
+  myNumber = client.info?.wid?.user;
+  await resolveMyLid();
   console.log("=================================================");
   console.log(" WhatsApp client ready");
   console.log(` Engine: ${ENGINE_URL}`);
+  console.log(` QR page: ${qrServer.url}`);
+  console.log(` Linked as: ${ownId ?? "unknown"} (number=${myNumber ?? "?"}, lid=${myLid ?? "?"})`);
+  console.log(` Mode: ${SELF_CHAT_ONLY ? "SELF-CHAT ONLY (chat yourself)" : "all chats"}`);
   console.log("=================================================");
 });
 
 client.on("disconnected", (reason: string) => {
+  qrServer.setStatus("disconnected");
   console.warn("[auris-whatsapp] Disconnected:", reason);
 });
 
+// Incoming messages from OTHER chats (the production flow: someone sends material).
+// Disabled by default for the demo (SELF_CHAT_ONLY) so the bot stays silent to
+// your real contacts.
 client.on("message", (msg: Message) => {
-  // Never let a handler rejection take down the process.
+  if (SELF_CHAT_ONLY) return;
+  if (msg.fromMe) return; // self-chat handled by message_create below
   void handleMessage(msg).catch((err) => {
     console.error("[auris-whatsapp] unhandled handler error:", err);
+  });
+});
+
+// fromMe messages — only the SELF-CHAT ("Message Yourself") is a demo input.
+// Skip our own replies (so we never loop) and ignore normal outgoing messages
+// to other people.
+client.on("message_create", (msg: Message) => {
+  if (!msg.fromMe) return; // incoming handled by the "message" listener above
+  if (isOwnReply(msg)) return; // our ack / error text / voice note
+  void (async () => {
+    if (!(await isSelfChat(msg))) return; // only the self-chat is a demo input
+    await handleMessage(msg);
+  })().catch((err) => {
+    console.error("[auris-whatsapp] self-chat handler error:", err);
   });
 });
 
