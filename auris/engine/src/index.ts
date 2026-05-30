@@ -1,11 +1,6 @@
-import dotenv from "dotenv";
-import path from "path";
-
-// Load env from the repo root .env (engine runs from engine/). Falls back to
-// real defaults in config.ts if absent, so boot never depends on .env existing.
-dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
-// Also pick up a local engine/.env if present (does not override already-set vars).
-dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
+// MUST be first: loads .env before any module (e.g. ./config) reads process.env.
+// ES imports are hoisted, so this side-effect import runs before the imports below.
+import "./loadEnv";
 
 import { createApp } from "./app";
 import { config } from "./config";
