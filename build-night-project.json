@@ -1,5 +1,5 @@
 {
-  "project-name": "<FILL THIS>",
-  "project-oneliner": "<FILL THIS>",
-  "project-description": "<FILL THIS>"
+  "project-name": "Auris",
+  "project-oneliner": "Open-source, self-hostable learning-agent engine that turns study material into WhatsApp audio study sessions.",
+  "project-description": "Auris is an API-first learning-agent engine: send study material (PDF or text) and get back a Spanish audio study session that teaches it and includes a quiz beat. It's built for working adults who study during long commutes on low-end prepaid phones, so its flagship channel is audio over WhatsApp — but the engine is the product, and every channel (WhatsApp now; an LMS, internal docs, or an MCP server later) is a client of the same /generate API. Model- and TTS-agnostic (Claude + ElevenLabs by default, swappable via config), it ships with a non-technical educator admin, an institutional dashboard, and a basic MCP server."
 }
