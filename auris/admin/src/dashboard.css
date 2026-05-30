@@ -1,0 +1,605 @@
+/* ============================================================
+   Auris Admin — institutional dashboard shell + mock sections.
+   Imported AFTER styles.css. Reuses tokens.css only (no new colors).
+   Namespaced (.shell-*, .stat-*, .entity-*, etc.) to avoid colliding
+   with the existing settings-screen classes in styles.css.
+   ============================================================ */
+
+/* ---------- Shell layout ---------- */
+.shell {
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  min-height: 100vh;
+}
+
+.shell-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.shell-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.shell-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shell-brand-name {
+  line-height: 1;
+}
+
+.shell-brand-caption {
+  color: var(--ink-3);
+}
+
+.shell-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.shell-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 0;
+  background: transparent;
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.shell-nav-item:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.shell-nav-item-active,
+.shell-nav-item-active:hover {
+  background: var(--clay-tint);
+  color: var(--clay);
+}
+
+.shell-nav-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.shell-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+}
+
+.shell-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pine);
+  flex: none;
+}
+
+.shell-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ---------- Topbar ---------- */
+.shell-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-8);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.shell-topbar-title {
+  margin: 0;
+}
+
+.shell-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.shell-institution {
+  color: var(--ink-2);
+}
+
+.shell-plan-pill {
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--clay);
+  background: var(--clay-tint);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+
+.shell-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--clay);
+  color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--fs-small);
+  flex: none;
+}
+
+/* ---------- Main canvas ---------- */
+.shell-main {
+  padding: var(--space-8);
+  flex: 1;
+  background: var(--paper);
+}
+
+/* Settings screen keeps its 760px centered column on the paper canvas. */
+.shell-main-ajustes {
+  padding: 0;
+}
+
+.shell-main-ajustes .container {
+  padding-top: var(--space-8);
+}
+
+/* ---------- Section headers ---------- */
+.sec-head {
+  margin-bottom: var(--space-6);
+}
+
+.sec-head .au-h2 {
+  margin: var(--space-2) 0 0;
+}
+
+.sec-head .au-lead {
+  margin-top: var(--space-2);
+}
+
+.sec-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* ---------- Stat cards ---------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+
+.stat-label {
+  color: var(--ink-2);
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--ink);
+  margin: var(--space-2) 0 0;
+  line-height: 1.1;
+}
+
+.stat-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.stat-delta {
+  font-size: var(--fs-caption);
+  font-weight: 700;
+}
+
+.stat-delta-up {
+  color: var(--pine);
+}
+
+.stat-delta-down {
+  color: var(--danger);
+}
+
+.stat-spark {
+  width: 88px;
+  height: 28px;
+  flex: none;
+}
+
+/* ---------- Panels (chart / table cards) ---------- */
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+
+.panel-full {
+  margin-bottom: var(--space-6);
+}
+
+.panel-title {
+  margin: 0 0 var(--space-4);
+}
+
+.panel .shell-table {
+  box-shadow: none;
+}
+
+/* ---------- Tables ---------- */
+.shell-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.shell-table th {
+  text-align: left;
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  font-weight: 700;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.shell-table td {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-small);
+  color: var(--ink);
+}
+
+.shell-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.shell-table tbody tr:hover td {
+  background: var(--paper);
+}
+
+/* ---------- Pills ---------- */
+.pill {
+  display: inline-block;
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.pill-ok {
+  color: var(--pine);
+  background: var(--pine-tint);
+}
+
+.pill-warn {
+  color: var(--honey-hover);
+  background: var(--honey-tint);
+}
+
+.pill-off {
+  color: var(--ink-3);
+  background: var(--paper-3);
+}
+
+.pill-danger {
+  color: var(--danger);
+  background: var(--danger-tint);
+}
+
+/* ---------- Filter chips ---------- */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.chip {
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--clay);
+}
+
+.chip-on {
+  color: var(--clay);
+  background: var(--clay-tint);
+  border-color: var(--clay);
+}
+
+/* ---------- Entity cards (agentes / canales) ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.entity-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.entity-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.entity-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.entity-name {
+  margin: 0;
+}
+
+.entity-sub {
+  margin: 2px 0 0;
+  color: var(--ink-3);
+}
+
+.entity-desc {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.entity-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.entity-stats dt {
+  color: var(--ink-3);
+  margin-bottom: 2px;
+}
+
+.entity-stats dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.entity-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-2);
+  border-radius: var(--r-md);
+}
+
+.entity-metric-label {
+  color: var(--ink-3);
+}
+
+.entity-metric-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+/* ---------- Bar chart ---------- */
+.barchart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  height: 160px;
+  padding-top: var(--space-4);
+}
+
+.barchart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.barchart-value {
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.barchart-bar {
+  width: 100%;
+  max-width: 48px;
+  background: var(--clay);
+  border-radius: 6px 6px 0 0;
+  transition: height var(--dur-slow) var(--ease-out);
+  min-height: 4px;
+}
+
+.barchart-label {
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+
+/* ---------- Progress bars ---------- */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.progress {
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--paper-3);
+  overflow: hidden;
+  min-width: 80px;
+  flex: 1;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--clay);
+  border-radius: var(--r-pill);
+}
+
+.progress-pct {
+  color: var(--ink-2);
+  flex: none;
+  min-width: 34px;
+  text-align: right;
+}
+
+/* ---------- Large sparkline (analítica) ---------- */
+.spark-large {
+  height: 160px;
+  padding-top: var(--space-4);
+}
+
+.spark-large-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    gap: var(--space-2);
+  }
+
+  .shell-brand {
+    margin-bottom: 0;
+    margin-right: auto;
+  }
+
+  .shell-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 100%;
+  }
+
+  .shell-nav-item {
+    width: auto;
+  }
+
+  .shell-status {
+    display: none;
+  }
+
+  .shell-topbar {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .shell-main {
+    padding: var(--space-5);
+  }
+
+  .shell-topbar-right {
+    gap: var(--space-2);
+  }
+
+  .shell-institution {
+    display: none;
+  }
+}
