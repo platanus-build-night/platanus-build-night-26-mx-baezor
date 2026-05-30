@@ -1,0 +1,14 @@
+{
+  "name": "auris",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Auris monorepo — API-first study-audio engine, WhatsApp demo client, and React admin.",
+  "scripts": {
+    "test": "npm test --prefix auris/engine && npm test --prefix auris/whatsapp && npm test --prefix auris/admin",
+    "typecheck": "npm run typecheck --prefix auris/engine && npm run typecheck --prefix auris/whatsapp && npm run typecheck --prefix auris/admin",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
