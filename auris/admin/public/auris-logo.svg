@@ -6,5 +6,5 @@
     <path d="M32 26 C38 21 46 20 53 22 L53 50 C46 48 38 49 32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
     <path d="M32 26 L32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round"></path>
   </g>
-  <text class="wm" x="74" y="46" fill="#2A1C13">Auris</text>
+  <text class="wm" x="74" y="49" fill="#2A1C13" font-size="40" font-weight="800" font-family="Georgia, 'Times New Roman', serif" letter-spacing="-0.5">Auris</text>
 </svg>

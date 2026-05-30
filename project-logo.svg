@@ -1,0 +1,11 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Auris">
+  <rect width="1000" height="1000" fill="#FBF4E9"/>
+  <!-- brand mark (64x64) scaled x5 = 320, centered on cx=500 -->
+  <g transform="translate(340,235) scale(5)">
+    <circle cx="32" cy="11" r="3.4" fill="#E8A53D"/>
+    <path d="M32 26 C26 21 18 20 11 22 L11 50 C18 48 26 49 32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M32 26 C38 21 46 20 53 22 L53 50 C46 48 38 49 32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M32 26 L32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" fill="none"/>
+  </g>
+  <text x="500" y="720" text-anchor="middle" fill="#2A1C13" font-family="Georgia, 'Times New Roman', serif" font-size="170" font-weight="800" letter-spacing="-4">Auris</text>
+</svg>
