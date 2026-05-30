@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **MCP server.** A thin stdio Model Context Protocol server (`auris/mcp`) exposing
+  the engine to AI tools via two tools — `generate_audio_lesson` (text → audio study
+  session) and `get_settings` — holding zero generation logic and talking to the
+  engine over HTTP only. Ships a README with the Claude Desktop/Code config snippet.
+
 ## [0.1.0] - 2026-05-29
 
 ### Added
