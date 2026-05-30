@@ -1,0 +1,10 @@
+<svg width="252" height="64" viewBox="0 0 252 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Auris">
+  
+  <g transform="translate(0,0)">
+    <circle cx="32" cy="11" r="3.4" fill="#E8A53D"></circle>
+    <path d="M32 26 C26 21 18 20 11 22 L11 50 C18 48 26 49 32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M32 26 C38 21 46 20 53 22 L53 50 C46 48 38 49 32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M32 26 L32 53" stroke="#C75A35" stroke-width="4.6" stroke-linecap="round"></path>
+  </g>
+  <text class="wm" x="74" y="46" fill="#2A1C13">Auris</text>
+</svg>

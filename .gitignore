@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment (keep .env.example)
+.env
+.env.local
+
+# Generated audio (ephemeral)
+audio/
+*.mp3
+
+# whatsapp-web.js session/cache
+.wwebjs_auth/
+.wwebjs_cache/
+
+# OS / logs
+.DS_Store
+*.log
+
+# Build workflow script (session tooling)
+.auris-build.workflow.js

@@ -1,0 +1,168 @@
+/* ============================================================
+   AURIS — Design Foundations: Color + Type
+   "aprender empieza por escuchar"
+   Warm · Human · Trustworthy · Audio-first
+   ------------------------------------------------------------
+   FONTS: Loaded from Google Fonts CDN (see @import below).
+   No local .ttf/.woff files are bundled — if you need an
+   offline build, download Bitter, Hanken Grotesk and IBM Plex
+   Mono and drop them in fonts/.  (Flagged to the user.)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---------- CORE NEUTRALS (warm, never pure gray) ---------- */
+  --paper:        #FBF4E9; /* primary background — warm cream / paper  */
+  --paper-2:      #F4E8D5; /* alt surface, sunken wells, striping      */
+  --paper-3:      #EEDFC8; /* deeper warm tan — dividers on cream      */
+  --surface:      #FFFDF8; /* raised cards on paper (near-white warm)  */
+  --ink:          #2A1C13; /* primary text — warm near-black brown     */
+  --ink-2:        #6B5746; /* secondary text — warm taupe              */
+  --ink-3:        #9C8A77; /* tertiary text / placeholders / captions  */
+  --line:         #E3D4BC; /* hairline borders on cream                */
+  --line-strong:  #CDB99B; /* stronger borders / input outlines        */
+
+  /* ---------- BRAND ---------- */
+  /* Clay / terracotta — PRIMARY. Human, earthy, energetic.   */
+  --clay:         #C75A35;
+  --clay-hover:   #B54E2C; /* hover: a notch darker            */
+  --clay-press:   #9F4324; /* active/press: deeper still       */
+  --clay-tint:    #F6E1D4; /* 12%-ish wash for fills/badges    */
+  --clay-tint-2:  #EFCBB6; /* slightly deeper tint             */
+
+  /* Honey / amber — ACCENT. Sound, warmth, highlight.        */
+  --honey:        #E8A53D;
+  --honey-hover:  #D8941F;
+  --honey-tint:   #FBEDD0;
+
+  /* Pine — TRUST / GROWTH / SUCCESS. Deep warm green.        */
+  --pine:         #2C6E54;
+  --pine-hover:   #235A45;
+  --pine-tint:    #D8E8DF;
+
+  /* ---------- SEMANTIC ---------- */
+  --success:      #2C6E54; /* = pine                          */
+  --success-tint: #D8E8DF;
+  --warning:      #E8A53D; /* = honey                         */
+  --warning-tint: #FBEDD0;
+  --danger:       #BE3A28; /* warm brick red                  */
+  --danger-tint:  #F6DBD4;
+  --info:         #2F6E76; /* warm teal — links/info          */
+  --info-tint:    #D6E7E8;
+
+  --link:         var(--clay);
+  --focus-ring:   #E8A53D; /* honey focus ring                */
+
+  /* ---------- WAVEFORM (audio-player accent only) ---------- */
+  /* Scoped to the audio player / voice-note components. NOT a   */
+  /* brand-wide motif — the brand identity is the open-book mark.*/
+  --wave-1:       #C75A35;
+  --wave-2:       #E08A4A;
+  --wave-3:       #E8A53D;
+  --wave-track:   #EAD9C0;
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: 'Bitter', Georgia, 'Times New Roman', serif;  /* warm slab — headings, brand voice */
+  --font-sans:    'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif; /* UI + body */
+  --font-mono:    'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace; /* code, tokens, instance IDs */
+
+  /* ---------- TYPE SCALE (rem, 16px base) ---------- */
+  --fs-display: 3.5rem;   /* 56 */
+  --fs-h1:      2.5rem;   /* 40 */
+  --fs-h2:      1.875rem; /* 30 */
+  --fs-h3:      1.375rem; /* 22 */
+  --fs-h4:      1.125rem; /* 18 */
+  --fs-body:    1rem;     /* 16 — never smaller for primary reading */
+  --fs-small:   0.875rem; /* 14 */
+  --fs-caption: 0.75rem;  /* 12 — labels/meta only */
+
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-body:    1.55;
+
+  /* ---------- SPACING (4px base) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------- RADII (generous, friendly) ---------- */
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   16px;
+  --r-xl:   24px;
+  --r-pill: 999px;
+
+  /* ---------- SHADOWS (warm-tinted, soft — never gray) ---------- */
+  --shadow-sm: 0 1px 2px rgba(42,28,19,.08);
+  --shadow-md: 0 2px 8px rgba(42,28,19,.10), 0 1px 2px rgba(42,28,19,.06);
+  --shadow-lg: 0 10px 28px rgba(42,28,19,.14), 0 2px 6px rgba(42,28,19,.08);
+  --shadow-pop: 0 18px 48px rgba(42,28,19,.20);
+  /* Honey "glow" for active audio / now-playing states */
+  --glow-honey: 0 0 0 4px rgba(232,165,61,.28);
+
+  /* ---------- MOTION ---------- */
+  --ease-out:   cubic-bezier(.22,.61,.36,1);    /* default ease-out  */
+  --ease-soft:  cubic-bezier(.4,0,.2,1);        /* gentle in-out     */
+  --dur-fast:   120ms;
+  --dur-base:   200ms;
+  --dur-slow:   320ms;
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Apply via element or .au- utility classes.
+   ============================================================ */
+
+.au-display,
+.au-h1, .au-h2, .au-h3, .au-h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+.au-display { font-size: var(--fs-display); font-weight: 800; letter-spacing: -0.02em; }
+.au-h1 { font-size: var(--fs-h1); font-weight: 700; }
+.au-h2 { font-size: var(--fs-h2); font-weight: 700; }
+.au-h3 { font-size: var(--fs-h3); font-weight: 600; line-height: var(--lh-snug); }
+.au-h4 { font-size: var(--fs-h4); font-weight: 600; line-height: var(--lh-snug); font-family: var(--font-sans); letter-spacing: 0; }
+
+.au-body,
+p.au { font-family: var(--font-sans); font-size: var(--fs-body); line-height: var(--lh-body); color: var(--ink); margin: 0; text-wrap: pretty; }
+.au-lead { font-family: var(--font-sans); font-size: var(--fs-h4); line-height: 1.5; color: var(--ink-2); }
+.au-small { font-family: var(--font-sans); font-size: var(--fs-small); line-height: 1.45; color: var(--ink-2); }
+.au-caption { font-family: var(--font-sans); font-size: var(--fs-caption); line-height: 1.3; color: var(--ink-3); }
+
+/* Eyebrow / kicker — small uppercase label, used above headings */
+.au-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+
+.au-mono { font-family: var(--font-mono); font-size: var(--fs-small); }
+code.au, .au-code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.1em 0.4em;
+  color: var(--ink);
+}
+
+a.au, .au-link { color: var(--link); text-decoration: none; border-bottom: 1.5px solid var(--clay-tint-2); transition: border-color var(--dur-fast) var(--ease-out); }
+a.au:hover, .au-link:hover { border-bottom-color: var(--clay); }
